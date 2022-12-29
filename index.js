@@ -6,6 +6,8 @@ const app = express()
 app.use(bodyparser.urlencoded({extended: true}))
 app.use(bodyparser.json())
 app.use(morgan("dev"))
+
+
 app.use('/', require('./routes/user.routes'))
 app.use('/sons/', require('./routes/Sons.routes'))
 app.use('/roles',require('./routes/Roles.routes'))

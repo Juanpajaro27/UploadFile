@@ -32,7 +32,6 @@ exports.GetSonsById = (req,res)=>{
     })
 }
 
-
 exports.DeleteSons = (req,res)=>{
     connection.query('DELETE FROM employee_sons where id_son_dougther = ?', req.params.id,(err,result)=>{
         if(err){
@@ -42,3 +41,38 @@ exports.DeleteSons = (req,res)=>{
     })
 }
 
+exports.GetGender = (req,res)=>{
+    const {business_id,gender} = req.body
+    connection.query('select employees.CC,employees.firstname, employees.secondname, employees.first_lastname,employees.second_lastname, employee_sons.firstname, employee_sons.secondname, employee_sons.first_lastname, employee_sons.second_lastname, employee_sons.id_son_dougther from employee_sons inner join employees on employee_sons.CC_parents = employees.CC where employees.business_id = ? and employee_sons.gender = ?',[business_id,gender],(err,result)=>{
+
+        if(err){
+            return res.json({error:err})
+        }else{
+            return res.json({result})
+        }
+    })
+}
+
+exports.GetScholarship = (req,res)=>{
+    const scholarship = req.body.scholarship
+    console.log(scholarship)
+    connection.query('select employee_sons.id_son_dougther, employee_sons.firstname, employee_sons.secondname, employee_sons.first_lastname, employee_sons.second_lastname,employee_sons.gender from employee_sons inner join employees on employee_sons.CC_parents = employees.CC where scholarship = ? and school_year = ?',(err,result)=>{
+        if(err){
+            return res.json({error:err})
+        }else{
+            return res.json({result})
+        }
+    })
+}
+
+exports.GetAge = (req,res)=>{
+    const age = req.body.age
+    console.log(age)
+    connection.query('select employee_sons.firstname, employee_sons.secondname, employee_sons.first_lastname, employee_sons.second_lastname, employee_sons.age, employee_sons.id_son_dougther from employee_sons inner join employees on employees.CC = employee_sons.CC_parents inner join business on employees.business_id = business.business_id where employee_sons.age < ?', (err,result)=>{
+        if(err){
+            return res.json({error:err})
+        }else{
+            return res.json({result})
+        }
+    })
+}
